@@ -1,0 +1,68 @@
+[
+ {
+  "litera": "a",
+  "text": "capacitatea de a concepe proiecte arhitecturale care să corespundă atât cerințelor estetice, cât și cerințelor tehnice;",
+  "scurt": "Proiectare: cerințe estetice și tehnice",
+  "esco": "satisface cerințe estetice; satisface cerințe tehnice; proiectează clădiri; design de arhitectură (cunoștințe)"
+ },
+ {
+  "litera": "b",
+  "text": "cunoștințe corespunzătoare despre istoria și teoriile arhitecturii, precum și despre arte, tehnologii și științe umane conexe;",
+  "scurt": "Istoria și teoria arhitecturii; arte, tehnologii, științe umane",
+  "esco": "teoria arhitecturii (cunoștințe); arhitectură istorică (cunoștințe opționale)"
+ },
+ {
+  "litera": "c",
+  "text": "cunoștințe despre arte frumoase ca factori ce pot influența calitatea conceperii proiectelor arhitecturale;",
+  "scurt": "Arte frumoase și calitatea proiectului",
+  "esco": "arte frumoase (cunoștințe opționale)"
+ },
+ {
+  "litera": "d",
+  "text": "cunoștințe corespunzătoare despre urbanism, planificarea și tehnicile aplicate în procesul de planificare;",
+  "scurt": "Urbanism și tehnici de planificare",
+  "esco": "planificare urbană; reglementări privind planificarea zonală (cunoștințe); proiectează spații deschise; proiectează dispunerea spațială a spațiilor exterioare"
+ },
+ {
+  "litera": "e",
+  "text": "capacitatea de a înțelege relațiile dintre oameni și creațiile arhitecturale, pe de o parte, și creațiile arhitecturale și mediul lor, pe de altă parte, precum și capacitatea de a înțelege necesitatea de a armoniza creațiile arhitecturale și spațiile în funcție de necesitățile și scara umană;",
+  "scurt": "Om – arhitectură – mediu; scara umană",
+  "esco": "studiază relația dintre clădiri, oameni și mediu; asigură accesibilitatea infrastructurii"
+ },
+ {
+  "litera": "f",
+  "text": "capacitatea de a înțelege profesia de arhitect și rolul său în societate, în special prin elaborarea de proiecte ținând seama de factorii sociali;",
+  "scurt": "Profesia de arhitect și rolul ei social",
+  "esco": "identifică nevoile clienților; negociază cu părțile interesate; comunică cu rezidenții locali (opțională)"
+ },
+ {
+  "litera": "g",
+  "text": "înțelegerea metodelor de cercetare și de pregătire a proiectului de construcție;",
+  "scurt": "Metode de cercetare și pregătirea proiectului",
+  "esco": "efectuează cercetare de teren; elaborează studiul de fezabilitate; redactează note de informare arhitecturale"
+ },
+ {
+  "litera": "h",
+  "text": "cunoștințe despre problemele de proiectare structurală și de construcție și de inginerie asociate proiectării clădirilor;",
+  "scurt": "Structuri, construcții și inginerie",
+  "esco": "integrează principiile de inginerie în proiectarea arhitecturală; examinează constrângerile de construcție în proiectarea arhitecturală"
+ },
+ {
+  "litera": "i",
+  "text": "cunoștințe corespunzătoare despre probleme fizice și tehnologii, precum și despre funcția construcțiilor, astfel încât să le doteze cu toate elementele de confort interior și de protecție climaterică, în cadrul dezvoltării sustenabile;",
+  "scurt": "Fizica clădirii, confort, protecție climatică, sustenabilitate",
+  "esco": "proiectează măsuri pasive privind energia; proiectează sisteme de anvelopare a clădirilor; evaluează proiectarea integrată a clădirilor; proiectare durabilă a clădirilor (cunoștințe)"
+ },
+ {
+  "litera": "j",
+  "text": "capacitatea tehnică care să îi permită să conceapă construcții care să îndeplinească cerințele utilizatorilor, respectând totodată limitele impuse de buget și de reglementările în domeniul construcțiilor;",
+  "scurt": "Cerințele utilizatorilor, buget, reglementări",
+  "esco": "integrează cerințele de construcție în proiectarea arhitecturală; furnizează rapoarte de analiză cost-beneficiu; îndeplinește reglementările tehnice în construcții; coduri pentru construcții (cunoștințe)"
+ },
+ {
+  "litera": "k",
+  "text": "cunoștințe corespunzătoare despre industrii, organizații, reglementări și proceduri care intervin în procesul de concretizare a proiectelor în clădiri și de integrare a planurilor în planificarea generală.",
+  "scurt": "Industrie, organizații, proceduri; integrarea în planificarea generală",
+  "esco": "reglementări în arhitectură (cunoștințe); oferă consiliere în domeniul construcțiilor; pregătește cereri pentru autorizații de construire (opțională); supraveghează proiecte de construcții (opțională)"
+ }
+]

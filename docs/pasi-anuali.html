@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fișele disciplinelor – pașii anuali</title><style>
+:root{--bg:#fbfaf7;--fg:#1f1f1f;--muted:#5f5f5f;--line:#e2ded6;--accent:#8a3b12;--card:#ffffff;--mark:#fff4d6;--code:#f3efe7}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171614;--fg:#ece9e3;--muted:#a9a49b;--line:#34312c;--accent:#e39a6c;--card:#1f1d1a;--mark:#3a3120;--code:#2a2723}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.6 Georgia,'Times New Roman',serif}
+a{color:var(--accent)}
+header{padding:28px 16px 18px;border-bottom:1px solid var(--line)}
+header h1{margin:0 0 6px;font-size:28px;line-height:1.2}
+header p{margin:0;color:var(--muted)}
+.wrap{display:grid;grid-template-columns:270px minmax(0,1fr);gap:40px;max-width:1180px;margin:0 auto;padding:0 16px}
+nav{position:sticky;top:0;align-self:start;max-height:100vh;overflow:auto;padding:20px 0;font-size:14px;line-height:1.45}
+nav a{display:block;padding:3px 0;text-decoration:none;color:var(--muted)}
+nav a:hover{color:var(--accent)}
+nav .g{margin:14px 0 4px;font-weight:bold;color:var(--fg);text-transform:uppercase;font-size:12px;letter-spacing:.05em}
+main{padding:12px 0 80px;min-width:0}
+section{scroll-margin-top:12px;padding:18px 20px;margin:0 -20px 6px;border-radius:8px;border:1px solid transparent}
+section:target{background:var(--mark);border-color:var(--line)}
+h2{font-size:22px;margin:34px 0 4px;padding-bottom:4px;border-bottom:2px solid var(--line)}
+h3{font-size:18px;margin:0 0 6px}
+.unde{font-size:13px;color:var(--muted);margin:-2px 0 8px}
+.auto{display:inline-block;font-size:12px;padding:1px 8px;border-radius:10px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:2px}
+.tu{background:#e9f3e4;color:#2f5d23}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tu{background:#24341f;color:#a9d29a}}
+code,.ex{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.92em}
+.ex{display:block;padding:10px 12px;margin:8px 0;border-left:3px solid var(--accent);border-radius:0 6px 6px 0}
+.ex small{color:var(--muted);font-size:11px}
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:15px}
+th,td{border:1px solid var(--line);padding:6px 8px;vertical-align:top;text-align:left}
+th{background:var(--code)}
+ol li,ul li{margin:4px 0}
+.pas{counter-increment:pas;position:relative;padding:14px 16px 14px 58px;margin:10px 0;background:var(--card);border:1px solid var(--line);border-radius:8px}
+.pas:before{content:counter(pas);position:absolute;left:16px;top:13px;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;text-align:center;font:bold 15px/28px Georgia,serif}
+.pasi{counter-reset:pas}
+.cand{font-size:13px;color:var(--muted)}
+.atentie{border-left:3px solid #c0392b;padding:6px 12px;margin:10px 0;background:var(--card)}
+@media (max-width:860px){.wrap{display:block}nav{position:static;max-height:none;border-bottom:1px solid var(--line);columns:2;column-gap:20px}nav .g{break-after:avoid}section{margin:0 0 6px;padding:14px 4px}}
+@media print{nav,header p{display:none}.wrap{display:block}section:target{background:none}}
+</style></head>
+<body><header><div style="max-width:1180px;margin:0 auto"><h1>Fișele disciplinelor – pașii anuali</h1><p>Pentru directorul de departament, în fișierul-mamă · <a href="index.html">Cum se completează fișa</a></p></div></header>
+<div class="wrap"><nav><div class="g">Pași</div><a href="#pasi">Pașii, în ordine</a><a href="#script">Când schimbi scriptul</a><div class="g">Altele</div><a href="index.html">Cum se completează fișa</a></nav><main><section id="pasi"><h2>Pașii, în ordine</h2><div class="pasi"><div class="pas"><div class="cand">iulie–septembrie</div><b>Fă un backup</b><p>În fișierul-mamă: meniul <b>Fișe disciplină → 4. BACKUP FD</b>. Copiază toate fișele și mama într-un folder „BACKUP an-lună-zi”. Primești email la final.</p></div><div class="pas"><div class="cand">după aprobarea planului</div><b>Pune planul nou în mamă</b><p>Copiază în mamă foaia cu planul de învățământ aprobat pentru noul an universitar (același format ca „PLAN ACTUAL”: un tabel pe an, semestrul impar și cel par alăturate). În INFO, la <code>PLAN_FOAIE_CURENTA</code>, scrie numele foii. Dacă planul stă în alt fișier Google, pune linkul la <code>PLAN_FISIER_URL</code>.</p></div><div class="pas"><div class="cand">înainte de preluare</div><b>Actualizează foaia INFO</b><ul><li><code>AN_UNIVERSITAR</code> (ex. 2027-2028) și <code>AN_CALENDARISTIC</code>;</li><li><code>DECAN</code>, directorii de departament (tabelul DEPARTAMENT) și emailurile lor;</li><li>dacă s-au schimbat: <code>ORE_CREDIT</code>, <code>SAPT_SEMESTRU</code>, limitele de examinare, criteriile de evaluare, textul de promovare;</li><li>opțional <code>LIMBI_STRAINE</code> (implicit engleză și franceză).</li></ul></div><div class="pas"><div class="cand">înainte de preluare</div><b>Actualizează foaia PROFESORI</b><p>Cadrele didactice noi, cu email și gradul didactic; corectează numele schimbate. Numele din coloana M sunt cele care apar în lista de titulari.</p></div><div class="pas"><div class="cand"></div><b>Preia disciplinele din plan</b><p><b>Fișe disciplină → 1. Preia disciplinele din PLAN.</b> Lista DISCIPLINE se reface din plan; disciplinele care existau își păstrează titularii și fișa. Dacă unele rânduri vechi nu mai sunt în plan, scriptul întreabă dacă le ștergi sau le păstrezi marcate.</p><p class="cand">Varianta „AN NOU” (backup complet + listă refăcută de la zero, fără titulari) se folosește doar când vrei să pornești curat, de exemplu la un plan cu totul nou.</p></div><div class="pas"><div class="cand"></div><b>Completează titularii și departamentul</b><p>În DISCIPLINE, la rândurile noi (fără titulari): titularii de curs și de aplicații (din listă) și departamentul. Verifică și rândurile de limbi străine: fiecare limbă are rândul ei.</p></div><div class="pas"><div class="cand"></div><b>Fă fișe pentru disciplinele noi</b><p>Pentru fiecare disciplină nouă fără fișă: în folderul fișelor, pe o fișă existentă, <b>Fișier → Creează o copie</b>, cu numele <code>COD_Denumire</code>. Golește în copie textele profesorului (capitolele 4–10, specificările, codurile din PANOU). Restul se completează automat la pașii următori.</p></div><div class="pas"><div class="cand"></div><b>Leagă fișele de listă</b><p><b>Fișe disciplină → 2. Generează URL/stare fișe.</b> Fișele care nu se pot lega automat apar în foaia <b>NELEGATE</b> (roz): alege disciplina din listă și rulează din nou pasul. Fișele disciplinelor scoase din plan mută-le din folderul fișelor (de exemplu într-un folder de arhivă din afara lui), ca să nu mai apară la NELEGATE.</p></div><div class="pas"><div class="cand"></div><b>Scrie datele din mamă în fișe</b><p><b>Fișe disciplină → 3. Actualizează FD.</b> Fiecare fișă primește anul universitar, codul, orele, creditele, titularii, lista de rezultate ale învățării, comentariile și semnele ⓘ. Textele profesorilor nu se ating. Dacă durează, continuă singur și trimite email.</p></div><div class="pas"><div class="cand"></div><b>Dă drepturi și trimite fișele</b><p><b>6. Acordă drepturi de editare</b> (titularii și directorul devin editori), apoi <b>7. Trimite – TEST</b> (primești tu 3 emailuri de probă) și, după ce le verifici, <b>8. Trimite – REAL</b>. Emailurile nu se pot retrage.</p></div><div class="pas"><div class="cand">în timpul completării</div><b>Urmărește progresul și avizează</b><p>Rulează din când în când <b>2. Generează URL/stare fișe</b>: în DISCIPLINE vezi starea fiecărei fișe, data completării și verificarea. Fișele „Gata de verificare” le avizezi în PANOU-ul fișei (Aviz director, Observații).</p></div><div class="pas"><div class="cand">după avizare</div><b>PDF și backup final</b><p><b>5. PDF FD</b> (un PDF pentru fiecare fișă, doar foaia FISA, fără comentarii) și încă un <b>4. BACKUP FD</b>.</p></div></div></section><section id="script"><h2>Când schimbi scriptul</h2><p>Codul scriptului este în depozitul GitHub <a href="https://github.com/raduandrei-source/PLANURI-FISE">PLANURI-FISE</a>, fișierul <code>Mama.gs</code>. În mamă: <b>Extensii → Apps Script</b>, înlocuiești tot textul cu cel nou, salvezi, apoi redeschizi mama și accepți permisiunile cerute.</p>
+<h2>Când schimbi lista de rezultate ale învățării</h2><p>Lista e în foaia COMPETENTE a mamei. Dacă schimbi codurile, foaia COMPETENTE_VECHI spune în ce cod nou trece fiecare cod vechi; la „Actualizează FD” codurile alese în fișe se convertesc singure.</p>
+<div class="atentie">Nu modifica direct în fișe câmpurile automate (anul, codul, orele, creditele, titularii): corectează-le în mamă și rulează „Actualizează FD”.</div></section></main></div></body></html>

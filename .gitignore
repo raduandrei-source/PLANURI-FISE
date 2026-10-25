@@ -1,0 +1,26 @@
+# Date cu informații personale (nume, emailuri, titulari) – rămân doar local / în Google Drive
+MAMA_FISE_DISCIPLINE_*.xlsx
+Fisele_*.zip
+PREDARE_*.zip
+INSTRUCTIUNI_CONTINUARE.md
+RAPORT_*.xlsx
+work/
+data/nodein.json
+data/nodeout.json
+data/fise_old.json
+data/plan_parsed.json
+
+# Scripturi istorice din predare (conțin date de test cu nume); se păstrează doar local
+tools/*
+!tools/site.py
+!tools/competente_noi.py
+!tools/compara_fise_plan.js
+!tools/extrage_fise.py
+!tools/raport_fise_plan.py
+
+# Testele vechi cu mock-uri, înlocuite de tests/run_all.js
+tests/*
+!tests/run_all.js
+
+~$*
+__pycache__/
