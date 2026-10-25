@@ -1,7 +1,7 @@
-// Teste offline pentru funcțiile pure din Mama.gs (node tests/run_all.js, din folderul proiectului)
+// Teste offline pentru funcțiile pure din Centralizator.gs (node tests/run_all.js, din folderul proiectului)
 const fs = require('fs'), vm = require('vm'), path = require('path'), assert = require('assert');
 const ROOT = path.join(__dirname, '..');
-vm.runInThisContext(fs.readFileSync(path.join(ROOT, 'Mama.gs'), 'utf8'));
+vm.runInThisContext(fs.readFileSync(path.join(ROOT, 'Centralizator.gs'), 'utf8'));
 // datele reale (plan, liste cu titulari, panourile fișelor) nu sunt publicate în depozit; testele care le cer se sar
 const citeste = f => fs.existsSync(path.join(ROOT, f)) ? JSON.parse(fs.readFileSync(path.join(ROOT, f), 'utf8')) : null;
 const d = citeste('data/nodein.json'), PANOURI = citeste('work/panouri.json');
@@ -94,7 +94,7 @@ td('migrare pe toate cele 123 de fișe: niciun cod pierdut, nimic peste 5', () =
 
 // ajutorul din fișă: comentarii + „ⓘ” cu link la site
 const SITE = fs.readFileSync(path.join(ROOT, 'docs', 'index.html'), 'utf8');
-t('ajutor: toate ancorele din Mama.gs există în docs/index.html', () => {
+t('ajutor: toate ancorele din Centralizator.gs există în docs/index.html', () => {
   const anc = new Set(AJUTOR_NOTE.map(x => x[1]).concat(Object.values(AJUTOR_LINKURI)));
   const lipsa = [...anc].filter(a => !SITE.includes('id="' + a + '"'));
   assert.deepStrictEqual(lipsa, []);

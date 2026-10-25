@@ -2,7 +2,7 @@
 #   docs/index.html        – cum se completează fișa disciplinei și rezultatele învățării (fiecare câmp are o ancoră #id)
 #   docs/pasi-anuali.html  – pașii anuali ai directorului pentru generarea fișelor
 #   python -I tools/site.py      (din folderul proiectului)
-# Ancorele folosite în Mama.gs (AJUTOR_FISA) trebuie să existe aici; testul tests/run_all.js le verifică.
+# Ancorele folosite în Centralizator.gs (AJUTOR_FISA) trebuie să existe aici; testul tests/run_all.js le verifică.
 import json, os, html
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -59,11 +59,11 @@ def pagina(titlu, subtitlu, nav, corp, alta):
 <div class="wrap"><nav>{nav}</nav><main>{corp}</main></div></body></html>"""
 
 def sec(id_, titlu, corp, unde='', auto=None):
-    eticheta = '' if auto is None else (' <span class="auto">automat, din mamă</span>' if auto else ' <span class="auto tu">completezi tu</span>')
+    eticheta = '' if auto is None else (' <span class="auto">automat, din centralizator</span>' if auto else ' <span class="auto tu">completezi tu</span>')
     u = f'<div class="unde">{unde}</div>' if unde else ''
     return f'<section id="{id_}"><h3>{titlu}{eticheta}</h3>{u}{corp}</section>'
 
-NU_MODIFICI = '<p>Nu se scrie în fișă: valoarea vine din fișierul-mamă (planul de învățământ sau foaia INFO). Dacă e greșită, spune-i directorului de departament; se corectează în mamă și apare în fișă la următorul „Actualizează FD”.</p>'
+NU_MODIFICI = '<p>Nu se scrie în fișă: valoarea vine din centralizator (planul de învățământ sau foaia INFO). Dacă e greșită, spune-i directorului de departament; se corectează în centralizator și apare în fișă la următorul „Actualizează FD”.</p>'
 
 # ---------------- index.html ----------------
 SECT = []
@@ -74,7 +74,7 @@ add('Început', 'cum-functioneaza', 'Cum funcționează fișa', sec('cum-functio
 <p>Fișa are două foi vizibile:</p>
 <ul><li><b>FISA</b> – fișa propriu-zisă, exact cum se tipărește. Aici scrii textele disciplinei.</li>
 <li><b>PANOU</b> – starea fișei, avizul directorului, alegerea rezultatelor învățării și verificările automate.</li></ul>
-<p>Câmpurile marcate <span class="auto">automat, din mamă</span> sunt completate de fișierul-mamă al facultății (planul de învățământ, foaia INFO, lista de titulari). Nu le modifica: la următoarea actualizare ar fi rescrise.
+<p>Câmpurile marcate <span class="auto">automat, din centralizator</span> sunt completate din fișierul „Centralizator discipline și titulari ARH” al facultății (planul de învățământ, foaia INFO, lista de titulari). Nu le modifica: la următoarea actualizare ar fi rescrise.
 Câmpurile marcate <span class="auto tu">completezi tu</span> sunt ale tale.</p>
 <p>Câmpurile obligatorii necompletate apar cu <b>portocaliu</b>, iar valorile care nu se potrivesc cu planul cu <b>roșu</b>, cât timp starea fișei este „În lucru”. Banda de sus din PANOU spune ce mai e de corectat. Avertismentele nu blochează lucrul.</p>
 <p>În dreapta fișei (coloana M, în afara zonei tipărite), semnul <b>ⓘ</b> de pe fiecare rând duce direct la explicația câmpului de pe această pagină. Câmpurile automate au și un comentariu: treci cu mouse-ul peste celulă. Comentariile și semnele ⓘ nu apar în PDF.</p>"""))
@@ -85,9 +85,9 @@ add('Început', 'stare', 'Stare, aviz, verificare', sec('stare', 'Stare, aviz, v
 <li>Banda de sus a PANOU-ului arată ✔ dacă fișa e completă și corectă; altfel, lista problemelor.</li></ul>""", unde='PANOU, rândurile 1–9', auto=False))
 
 add('1–2. Date generale', 'date-program', '1.1–1.6 Date despre program', sec('date-program', '1.1–1.6 Date despre program; anul universitar', """
-<p>Universitatea, facultatea, domeniul, ciclul și programul de studii, precum și anul universitar din titlu, vin din foaia INFO a fișierului-mamă. Sunt aceleași pentru toate fișele.</p>""" + NU_MODIFICI, unde='FISA: A6, B8, B9, B11, B12, B13', auto=True))
+<p>Universitatea, facultatea, domeniul, ciclul și programul de studii, precum și anul universitar din titlu, vin din foaia INFO a centralizatorului. Sunt aceleași pentru toate fișele.</p>""" + NU_MODIFICI, unde='FISA: A6, B8, B9, B11, B12, B13', auto=True))
 add('1–2. Date generale', 'departament', '1.3 Departamentul', sec('departament', '1.3 Departamentul', """
-<p>Departamentul căruia îi aparține disciplina, din lista DISCIPLINE a mamei (Arhitectură sau Urbanism). De el depinde directorul care avizează fișa (rândul 71).</p>""" + NU_MODIFICI, unde='FISA: B10', auto=True))
+<p>Departamentul căruia îi aparține disciplina, din lista DISCIPLINE a centralizatorului (Arhitectură sau Urbanism). De el depinde directorul care avizează fișa (rândul 71).</p>""" + NU_MODIFICI, unde='FISA: B10', auto=True))
 add('1–2. Date generale', 'denumire', '2.1.1 Denumirea (RO)', sec('denumire', '2.1.1 Denumirea disciplinei, în limba română', """
 <p>Exact denumirea din planul de învățământ aprobat. La limbile străine, limba apare în paranteză, de exemplu „Limbi străine (Limba engleză)”.</p>""" + NU_MODIFICI, unde='FISA: E15', auto=True))
 add('1–2. Date generale', 'denumire-en', '2.1.1 Denumirea (EN)', sec('denumire-en', '2.1.1 Denumirea disciplinei, în limba engleză', """
@@ -95,7 +95,7 @@ add('1–2. Date generale', 'denumire-en', '2.1.1 Denumirea (EN)', sec('denumire
 add('1–2. Date generale', 'cod', '2.1.2 Codul', sec('cod', '2.1.2 Codul disciplinei', """
 <p>Codul din planul de învățământ. Prin el se leagă fișa de rândul ei din plan: orele, creditele și forma de evaluare se iau după cod.</p>""" + NU_MODIFICI, unde='FISA: E17', auto=True))
 add('1–2. Date generale', 'titulari', '2.2–2.3 Titularii', sec('titulari', '2.2–2.3 Titularii de curs și de aplicații', """
-<p>Titularii stabiliți de departament în lista DISCIPLINE a mamei (statul de funcții). Apar și la semnături, la sfârșitul fișei.</p>""" + NU_MODIFICI, unde='FISA: E18, E19, B69, B70', auto=True))
+<p>Titularii stabiliți de departament în lista DISCIPLINE a centralizatorului (statul de funcții). Apar și la semnături, la sfârșitul fișei.</p>""" + NU_MODIFICI, unde='FISA: E18, E19, B69, B70', auto=True))
 add('1–2. Date generale', 'an-semestru', '2.4–2.5 Anul, semestrul', sec('an-semestru', '2.4–2.5 Anul de studii și semestrul', """
 <p>Din planul de învățământ. Semestrul este numerotat pe tot programul (1–12): anul 3, semestrul al doilea = semestrul 6.</p>""" + NU_MODIFICI, unde='FISA: B20, E20', auto=True))
 add('1–2. Date generale', 'evaluare-tip', '2.6 Tipul de evaluare', sec('evaluare-tip', '2.6 Tipul de evaluare', """
@@ -182,10 +182,10 @@ add('8–10. Predare, evaluare', 'criterii-standard', '10.1 Criterii (standard)'
 add('8–10. Predare, evaluare', 'promovare', '10.6 Condiții de promovare', sec('promovare', '10.6 Condiții de promovare', '<p>Textul standard al facultății (INFO → TEXT_PROMOVARE).</p>' + NU_MODIFICI, unde='FISA: A65', auto=True))
 add('8–10. Predare, evaluare', 'ri-minimale', 'Rezultate minimale', sec('ri-minimale', 'Rezultatele învățării minimale', '<p>Ce trebuie să demonstreze studentul ca să promoveze (nota 5): pragul minim, formulat concret, legat de rezultatele din capitolul 7.</p>', unde='FISA: B66', auto=False))
 add('8–10. Predare, evaluare', 'semnaturi', 'Date și semnături', sec('semnaturi', 'Date și semnături', """
-<p>Data completării o scrii tu. Titularii, directorul de departament și decanul vin din mamă; datele avizării și aprobării se completează după ședințe.</p>""", unde='FISA: rândurile 68–72', auto=None))
+<p>Data completării o scrii tu. Titularii, directorul de departament și decanul vin din centralizator; datele avizării și aprobării se completează după ședințe.</p>""", unde='FISA: rândurile 68–72', auto=None))
 
 add('PDF', 'pdf', 'Tipărire și PDF', sec('pdf', 'Tipărire și PDF', """
-<p>PDF-urile se generează din fișierul-mamă, pentru toate fișele. Se exportă doar foaia FISA, A4, fără comentarii și fără coloana M cu semnele ⓘ. Colorările de verificare sunt oprite automat pe durata exportului.</p>""", auto=None))
+<p>PDF-urile se generează din centralizator, pentru toate fișele. Se exportă doar foaia FISA, A4, fără comentarii și fără coloana M cu semnele ⓘ. Colorările de verificare sunt oprite automat pe durata exportului.</p>""", auto=None))
 
 def nav_din(sectiuni):
     out, g0 = [], None
@@ -210,25 +210,25 @@ P = []
 def pas(cand, titlu, corp):
     P.append(f'<div class="pas"><div class="cand">{cand}</div><b>{titlu}</b>{corp}</div>')
 
-pas('iulie–septembrie', 'Fă un backup', '<p>În fișierul-mamă: meniul <b>Fișe disciplină → 4. BACKUP FD</b>. Copiază toate fișele și mama într-un folder „BACKUP an-lună-zi”. Primești email la final.</p>')
-pas('după aprobarea planului', 'Pune planul nou în mamă', '<p>Copiază în mamă foaia cu planul de învățământ aprobat pentru noul an universitar (același format ca „PLAN ACTUAL”: un tabel pe an, semestrul impar și cel par alăturate). În INFO, la <code>PLAN_FOAIE_CURENTA</code>, scrie numele foii. Dacă planul stă în alt fișier Google, pune linkul la <code>PLAN_FISIER_URL</code>.</p>')
+pas('iulie–septembrie', 'Fă un backup', '<p>În centralizator: meniul <b>Fișe disciplină → 4. BACKUP FD</b>. Copiază toate fișele și centralizatorul într-un folder „BACKUP an-lună-zi”. Primești email la final.</p>')
+pas('după aprobarea planului', 'Pune planul nou în centralizator', '<p>Copiază în centralizator foaia cu planul de învățământ aprobat pentru noul an universitar (același format ca „PLAN ACTUAL”: un tabel pe an, semestrul impar și cel par alăturate). În INFO, la <code>PLAN_FOAIE_CURENTA</code>, scrie numele foii. Dacă planul stă în alt fișier Google, pune linkul la <code>PLAN_FISIER_URL</code>.</p>')
 pas('înainte de preluare', 'Actualizează foaia INFO', '<ul><li><code>AN_UNIVERSITAR</code> (ex. 2027-2028) și <code>AN_CALENDARISTIC</code>;</li><li><code>DECAN</code>, directorii de departament (tabelul DEPARTAMENT) și emailurile lor;</li><li>dacă s-au schimbat: <code>ORE_CREDIT</code>, <code>SAPT_SEMESTRU</code>, limitele de examinare, criteriile de evaluare, textul de promovare;</li><li>opțional <code>LIMBI_STRAINE</code> (implicit engleză și franceză).</li></ul>')
 pas('înainte de preluare', 'Actualizează foaia PROFESORI', '<p>Cadrele didactice noi, cu email și gradul didactic; corectează numele schimbate. Numele din coloana M sunt cele care apar în lista de titulari.</p>')
 pas('', 'Preia disciplinele din plan', '<p><b>Fișe disciplină → 1. Preia disciplinele din PLAN.</b> Lista DISCIPLINE se reface din plan; disciplinele care existau își păstrează titularii și fișa. Dacă unele rânduri vechi nu mai sunt în plan, scriptul întreabă dacă le ștergi sau le păstrezi marcate.</p><p class="cand">Varianta „AN NOU” (backup complet + listă refăcută de la zero, fără titulari) se folosește doar când vrei să pornești curat, de exemplu la un plan cu totul nou.</p>')
 pas('', 'Completează titularii și departamentul', '<p>În DISCIPLINE, la rândurile noi (fără titulari): titularii de curs și de aplicații (din listă) și departamentul. Verifică și rândurile de limbi străine: fiecare limbă are rândul ei.</p>')
 pas('', 'Fă fișe pentru disciplinele noi', '<p>Pentru fiecare disciplină nouă fără fișă: în folderul fișelor, pe o fișă existentă, <b>Fișier → Creează o copie</b>, cu numele <code>COD_Denumire</code>. Golește în copie textele profesorului (capitolele 4–10, specificările, codurile din PANOU). Restul se completează automat la pașii următori.</p>')
 pas('', 'Leagă fișele de listă', '<p><b>Fișe disciplină → 2. Generează URL/stare fișe.</b> Fișele care nu se pot lega automat apar în foaia <b>NELEGATE</b> (roz): alege disciplina din listă și rulează din nou pasul. Fișele disciplinelor scoase din plan mută-le din folderul fișelor (de exemplu într-un folder de arhivă din afara lui), ca să nu mai apară la NELEGATE.</p>')
-pas('', 'Scrie datele din mamă în fișe', '<p><b>Fișe disciplină → 3. Actualizează FD.</b> Fiecare fișă primește anul universitar, codul, orele, creditele, titularii, lista de rezultate ale învățării, comentariile și semnele ⓘ. Textele profesorilor nu se ating. Dacă durează, continuă singur și trimite email.</p>')
+pas('', 'Scrie datele din centralizator în fișe', '<p><b>Fișe disciplină → 3. Actualizează FD.</b> Fiecare fișă primește anul universitar, codul, orele, creditele, titularii, lista de rezultate ale învățării, comentariile și semnele ⓘ. Textele profesorilor nu se ating. Dacă durează, continuă singur și trimite email.</p>')
 pas('', 'Dă drepturi și trimite fișele', '<p><b>6. Acordă drepturi de editare</b> (titularii și directorul devin editori), apoi <b>7. Trimite – TEST</b> (primești tu 3 emailuri de probă) și, după ce le verifici, <b>8. Trimite – REAL</b>. Emailurile nu se pot retrage.</p>')
 pas('în timpul completării', 'Urmărește progresul și avizează', '<p>Rulează din când în când <b>2. Generează URL/stare fișe</b>: în DISCIPLINE vezi starea fiecărei fișe, data completării și verificarea. Fișele „Gata de verificare” le avizezi în PANOU-ul fișei (Aviz director, Observații).</p>')
 pas('după avizare', 'PDF și backup final', '<p><b>5. PDF FD</b> (un PDF pentru fiecare fișă, doar foaia FISA, fără comentarii) și încă un <b>4. BACKUP FD</b>.</p>')
 
-P2 = """<h2>Când schimbi scriptul</h2><p>Codul scriptului este în depozitul GitHub <a href="https://github.com/raduandrei-source/PLANURI-FISE">PLANURI-FISE</a>, fișierul <code>Mama.gs</code>. În mamă: <b>Extensii → Apps Script</b>, înlocuiești tot textul cu cel nou, salvezi, apoi redeschizi mama și accepți permisiunile cerute.</p>
-<h2>Când schimbi lista de rezultate ale învățării</h2><p>Lista e în foaia COMPETENTE a mamei. Dacă schimbi codurile, foaia COMPETENTE_VECHI spune în ce cod nou trece fiecare cod vechi; la „Actualizează FD” codurile alese în fișe se convertesc singure.</p>
-<div class="atentie">Nu modifica direct în fișe câmpurile automate (anul, codul, orele, creditele, titularii): corectează-le în mamă și rulează „Actualizează FD”.</div>"""
+P2 = """<h2>Când schimbi scriptul</h2><p>Codul scriptului este în depozitul GitHub <a href="https://github.com/raduandrei-source/PLANURI-FISE">PLANURI-FISE</a>, fișierul <code>Centralizator.gs</code>. În centralizator: <b>Extensii → Apps Script</b>, înlocuiești tot textul cu cel nou, salvezi, apoi redeschizi centralizatorul și accepți permisiunile cerute.</p>
+<h2>Când schimbi lista de rezultate ale învățării</h2><p>Lista e în foaia COMPETENTE a centralizatorului. Dacă schimbi codurile, foaia COMPETENTE_VECHI spune în ce cod nou trece fiecare cod vechi; la „Actualizează FD” codurile alese în fișe se convertesc singure.</p>
+<div class="atentie">Nu modifica direct în fișe câmpurile automate (anul, codul, orele, creditele, titularii): corectează-le în centralizator și rulează „Actualizează FD”.</div>"""
 
 open(os.path.join(DOCS, 'pasi-anuali.html'), 'w', encoding='utf-8').write(pagina(
-    'Fișele disciplinelor – pașii anuali', 'Pentru directorul de departament, în fișierul-mamă',
+    'Fișele disciplinelor – pașii anuali', 'Pentru directorul de departament, în fișierul „Centralizator discipline și titulari ARH”',
     '<div class="g">Pași</div><a href="#pasi">Pașii, în ordine</a><a href="#script">Când schimbi scriptul</a><div class="g">Altele</div><a href="index.html">Cum se completează fișa</a>',
     '<section id="pasi"><h2>Pașii, în ordine</h2><div class="pasi">' + ''.join(P) + '</div></section><section id="script">' + P2 + '</section>',
     '<a href="index.html">Cum se completează fișa</a>'))

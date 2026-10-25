@@ -1,7 +1,7 @@
 import sys, json, glob, os
 sys.stdout.reconfigure(encoding='utf-8')
 from openpyxl import load_workbook
-src, mama, out = sys.argv[1], sys.argv[2], sys.argv[3]
+src, centralizator, out = sys.argv[1], sys.argv[2], sys.argv[3]
 fise = []
 for f in sorted(glob.glob(os.path.join(src, '*.xlsx'))):
     wb = load_workbook(f, data_only=False, read_only=True)
@@ -19,7 +19,7 @@ for f in sorted(glob.glob(os.path.join(src, '*.xlsx'))):
     fise.append({'fisier': os.path.basename(f), 'cod': v.get((4, 15), ''), 'cheie': cheie,
                  'randuri_tabel': len(tab), 'rand': own, 'foi': wb.sheetnames})
     wb.close()
-wb = load_workbook(mama, data_only=True)
+wb = load_workbook(centralizator, data_only=True)
 ws = wb['PLAN ACTUAL']
 plan = [[c if c is not None else '' for c in row] for row in ws.iter_rows(values_only=True)]
 ws = wb['DISCIPLINE']

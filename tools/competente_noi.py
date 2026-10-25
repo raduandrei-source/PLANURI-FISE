@@ -1,12 +1,12 @@
 # Lista nouă de competențe (ARACIS 1–8 × C/A/R, cu referințe D46) și tabelul cod vechi → cod nou.
-#   python -I tools/competente_noi.py <mama.xlsx> <ri_aracis.json> <iesire.xlsx> <mapare.json>
+#   python -I tools/competente_noi.py <centralizator.xlsx> <ri_aracis.json> <iesire.xlsx> <mapare.json>
 # ri_aracis.json: [[n, [cunoștințe], [aptitudini], [responsabilitate], discipline, pe_scurt, "litere D46"], ...]
 import sys, re, json, difflib, unicodedata
 from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 
-mama, ri_json, iesire, mapare_json = sys.argv[1:5]
+centralizator, ri_json, iesire, mapare_json = sys.argv[1:5]
 RI = json.load(open(ri_json, encoding='utf-8'))
 CAT = {'C': 'Cunoștințe', 'A': 'Aptitudini', 'R': 'Responsabilitate și autonomie'}
 VECHI_CAT = {'CN': 'C', 'AP': 'A', 'RA': 'R'}
@@ -32,7 +32,7 @@ ADAPTATE = {'AP13': ['A1'], 'RA14': ['R4'], 'RA15': ['R4']}
 RENUNTA = {'RA11', 'RA13'}
 
 # 2. codurile vechi → coduri noi (propozițiile ARACIS conținute în textul vechi sau foarte asemănătoare)
-vechi = [r for r in load_workbook(mama, data_only=True)['COMPETENTE'].iter_rows(min_row=2, values_only=True)
+vechi = [r for r in load_workbook(centralizator, data_only=True)['COMPETENTE'].iter_rows(min_row=2, values_only=True)
          if r[0] and re.match(r'^(CN|AP|RA)\d+$', str(r[0]))]
 mapare, randuri_map = {}, []
 for cod, _cat, text, *_ in vechi:
@@ -52,7 +52,7 @@ for cod, _cat, text, *_ in vechi:
     randuri_map.append([cod, nou, cum, str(text or '')])
 json.dump(mapare, open(mapare_json, 'w', encoding='utf-8'), ensure_ascii=False, indent=0)
 
-# 3. fișierul pentru mamă: foile COMPETENTE (nouă) și COMPETENTE_VECHI (tabelul de trecere)
+# 3. fișierul pentru centralizator: foile COMPETENTE (nouă) și COMPETENTE_VECHI (tabelul de trecere)
 F = 'Georgia'; GRI = PatternFill('solid', fgColor='E7E6E6')
 s = Side(style='thin', color='BFBFBF'); BORD = Border(left=s, right=s, top=s, bottom=s)
 def foaie(ws, cap, rows, lat):

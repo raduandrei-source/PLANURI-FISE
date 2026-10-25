@@ -1,13 +1,13 @@
 /**
- * MAMA – FIȘE DISCIPLINE  (script unic, se lipește în Extensii → Apps Script al fișierului-mamă)
+ * CENTRALIZATOR DISCIPLINE ȘI TITULARI ARH – FIȘE DISCIPLINE  (script unic, se lipește în Extensii → Apps Script al fișierului „Centralizator discipline și titulari ARH”)
  *
  * Meniul „Fișe disciplină” (se creează automat la deschiderea fișierului, prin onOpen):
  *   1. Preia disciplinele din PLAN        – reface lista DISCIPLINE din planul definit în INFO (PLAN_FISIER_URL + PLAN_FOAIE_CURENTA)
- *      AN NOU                             – BACKUP complet (fișe + mamă), apoi resetare curată a listei din plan
+ *      AN NOU                             – BACKUP complet (fișe + centralizatorul), apoi resetare curată a listei din plan
  *   2. Generează URL/stare fișe           – caută fișele din folder; completează URL, stare, aviz, data completării, verificare;
  *                                           fișele nelegate apar în foaia NELEGATE (roz) – alegi disciplina, la următoarea rulare se leagă singure
- *   3. Actualizează FD                    – scrie în fiecare fișă (valori) datele din mamă: INFO, plan, titulari, competențe
- *   4. BACKUP FD                          – folder „BACKUP an-lună-zi oră.minut” cu copii după toate fișele + mama
+ *   3. Actualizează FD                    – scrie în fiecare fișă (valori) datele din centralizator: INFO, plan, titulari, competențe
+ *   4. BACKUP FD                          – folder „BACKUP an-lună-zi oră.minut” cu copii după toate fișele + centralizatorul
  *   5. PDF FD                             – folder „PDF an-lună-zi oră.minut” cu câte un PDF (A4, potrivit pe lățime) pentru foaia FISA a fiecărei fișe
  *   6. Acordă drepturi de editare         – titularii + directorul departamentului devin editori ai fișei lor
  *   7. Trimite fișele (TEST / REAL)       – un singur email pentru fiecare profesor, cu toate fișele lui
@@ -34,7 +34,7 @@ const SITE_IMPLICIT = 'https://raduandrei-source.github.io/PLANURI-FISE/';   // 
 
 /* Ajutorul din fișă: comentarii pe câmpurile completate automat și „ⓘ” în coloana M (în afara zonei tipărite A:L),
  * cu link la secțiunea din site-ul de instrucțiuni. Ancorele trebuie să existe în docs/index.html (testul le verifică). */
-const AJ_PLAN = 'planul de învățământ (prin fișierul-mamă)', AJ_INFO = 'foaia INFO a fișierului-mamă', AJ_DISC = 'lista DISCIPLINE a fișierului-mamă';
+const AJ_PLAN = 'planul de învățământ (prin „Centralizator discipline și titulari ARH”)', AJ_INFO = 'foaia INFO a centralizatorului', AJ_DISC = 'lista DISCIPLINE a centralizatorului';
 const AJUTOR_NOTE = [   // [celule, ancoră, ce este, sursa]
   [['A6'], 'date-program', 'Anul universitar', AJ_INFO],
   [['B8', 'B9', 'B11', 'B12', 'B13'], 'date-program', 'Date despre program, aceleași pentru toate fișele', AJ_INFO],
@@ -49,7 +49,7 @@ const AJUTOR_NOTE = [   // [celule, ancoră, ce este, sursa]
   [['B23', 'D23', 'F23', 'H23', 'J23', 'L23'], 'ore-semestru', 'Ore pe semestru = ore pe săptămână × săptămâni (INFO → SAPT_SEMESTRU). Orele din capitolul 9 trebuie să dea exact aceste totaluri', AJ_PLAN],
   [['K31'], 'total-ore', 'Total ore pe semestru = credite × ore pe credit (INFO → ORE_CREDIT). Trebuie să fie egal cu 3.4 + 3.7', AJ_PLAN],
   [['K32'], 'credite', 'Credite ECTS', AJ_PLAN],
-  [['B42', 'B43', 'B44'], 'rezultate', 'Textul rezultatelor învățării alese în PANOU (coduri C/A/R), cu referința (ARACIS-n, D46-x), plus specificările manuale. Se schimbă din PANOU, nu de aici', 'lista COMPETENTE a fișierului-mamă'],
+  [['B42', 'B43', 'B44'], 'rezultate', 'Textul rezultatelor învățării alese în PANOU (coduri C/A/R), cu referința (ARACIS-n, D46-x), plus specificările manuale. Se schimbă din PANOU, nu de aici', 'lista COMPETENTE a centralizatorului'],
   [['B60', 'B61', 'B62', 'B63'], 'criterii-standard', 'Criteriile standard de evaluare ale facultății; apar doar la activitățile cu pondere', AJ_INFO],
   [['A65'], 'promovare', 'Condițiile de promovare, text standard al facultății', AJ_INFO],
   [['I71', 'I72'], 'semnaturi', 'Directorul de departament și decanul', AJ_INFO]
@@ -262,8 +262,8 @@ function profs_() {                                    // nume afișat (col. M) 
 function openFisa_(url) {                              // -> {ss, sh} sau null
   try {
     const ss = SpreadsheetApp.openByUrl(url), sh = ss.getSheetByName(SH_FISA);
-    // structura nouă: datele din mamă stau în foaia ascunsă _DATE (aceleași adrese de celule); fișele vechi le au în FISA
-    // structura nouă: FISA (doar fișa, se tipărește direct) + PANOU (stare, aviz, competențe, verificare) + _DATE (ascunsă, datele din mamă)
+    // structura nouă: datele din centralizator stau în foaia ascunsă _DATE (aceleași adrese de celule); fișele vechi le au în FISA
+    // structura nouă: FISA (doar fișa, se tipărește direct) + PANOU (stare, aviz, competențe, verificare) + _DATE (ascunsă, datele din centralizator)
     // structura veche: totul în FISA (stare O5, aviz O6, banner A1)
     if (!sh) return null;
     const pn = ss.getSheetByName(SH_PANOU);
@@ -374,7 +374,7 @@ function resetCompletDinPlan_() {
   return plan.length;
 }
 
-/** AN NOU: BACKUP complet (fișe + mamă) „BACKUP AN NOU [an]”, apoi – numai dacă backup-ul e complet – resetarea listei din plan. */
+/** AN NOU: BACKUP complet (fișe + centralizatorul) „BACKUP AN NOU [an]”, apoi – numai dacă backup-ul e complet – resetarea listei din plan. */
 function anNou() {
   const ui = SpreadsheetApp.getUi(), src = planSursa_();
   if (src.eroare) { ui.alert(src.eroare); return; }
@@ -383,7 +383,7 @@ function anNou() {
   const an = String(info_().param['AN_UNIVERSITAR'] || '').trim() || String(new Date().getFullYear());
   const nume = 'BACKUP AN NOU ' + an;
   const ok = confirma_('AN NOU – backup complet, apoi resetare', [
-    '1. Se face întâi BACKUP complet (toate fișele + fișierul-mamă) în folderul „' + nume + '”, în folderul fișelor.',
+    '1. Se face întâi BACKUP complet (toate fișele + centralizatorul) în folderul „' + nume + '”, în folderul fișelor.',
     '2. NUMAI după ce backup-ul e complet și verificat (număr copii = număr surse), lista DISCIPLINE se șterge COMPLET (titulari, departamente, URL-uri, stări, date) și se reface din planul ' + src.eticheta + ': ' + plan.length + ' discipline, fără titulari.',
     '3. Se șterge memoria scriptului (progres, marcaje de refresh) și foaia NELEGATE.',
     'Dacă backup-ul durează mai mult de ~5 minute, continuă singur în fundal; resetarea se face automat la final, iar tu primești un email cu raportul. Dacă backup-ul nu e complet, resetarea NU se face.',
@@ -415,7 +415,7 @@ function confirma_(titlu, vaFace, nuAtinge) {
 
 /* ===================== 2. REFRESH LISTĂ DIN FIȘE ===================== */
 
-/** Folderul cu fișe: INFO → FOLDER_FISE (link sau ID); dacă e gol, folderul în care se află fișierul-mamă. */
+/** Folderul cu fișe: INFO → FOLDER_FISE (link sau ID); dacă e gol, folderul în care se află centralizatorul. */
 function folderFise_() {
   const v = String(info_().param['FOLDER_FISE'] || '').trim();
   if (v) {
@@ -453,7 +453,7 @@ function refreshFise_(fortat, interactiv) {
   const lock = LockService.getScriptLock();
   if (!lock.tryLock(10000)) { if (interactiv) alertSafe_('Un alt refresh rulează deja.'); return; }
   try {
-    const t0 = Date.now(), ss = SpreadsheetApp.getActive(), mamaId = ss.getId();
+    const t0 = Date.now(), ss = SpreadsheetApp.getActive(), centralizatorId = ss.getId();
     const sh = ss.getSheetByName(SH_DISC), rows = readDisc_(sh);
     const byKey = {}; rows.forEach(r => { byKey[normKey_(r.cod, r.den)] = r; });
     const byUrlId = {}; rows.forEach(r => { const id = idFromUrl_(r.url); if (id) byUrlId[id] = r; });
@@ -470,7 +470,7 @@ function refreshFise_(fortat, interactiv) {
     const now = new Date();
     for (const f of it) {
       const id = f.getId();
-      if (id === mamaId) continue;
+      if (id === centralizatorId) continue;
       if (Date.now() - t0 > T_LIMIT_MS) { log.oprit = true; break; }
       const upd = f.getLastUpdated().getTime();
       let rec = byUrlId[id];
@@ -481,7 +481,7 @@ function refreshFise_(fortat, interactiv) {
         if (!ff) continue;                                           // alt fel de fișier (raport etc.)
         const sh2 = ff.sh;
         const dt = ff.dt, dd = dt.getRange('O3:O10').getValues().map(x => x[0]), pan = [[ff.pn.getRange(ff.adr.stare).getValue()], [ff.pn.getRange(ff.adr.aviz).getValue()]];
-        const vals = [dd[0], dd[1], pan[0][0], pan[1][0], '', '', '', dd[7]];   // [mama, cod, stare, aviz, …, cheie]; cod/cheie din _DATE, stare/aviz din panoul fișei
+        const vals = [dd[0], dd[1], pan[0][0], pan[1][0], '', '', '', dd[7]];   // [centralizator, cod, stare, aviz, …, cheie]; cod/cheie din _DATE, stare/aviz din panoul fișei
         const cheie = String(vals[7]).trim();
         if (!rec) {
           // rândul propriu al fișei în tabelul tehnic (fișele vechi conțin tot planul; cel nou, un singur rând) – găsit după cheie
@@ -515,7 +515,7 @@ function refreshFise_(fortat, interactiv) {
     } else if (!log.oprit) {
       const me = PropertiesService.getScriptProperties().getProperty('rf_me');
       if (me) MailApp.sendEmail(me, 'Generează URL/stare fișe – terminat', 'Rulare terminată în fundal.\nFișe citite în această rundă: ' + log.citite + (log.sarite ? ' (sărite, deja citite: ' + log.sarite + ')' : '') + '.' +
-        (log.nelegate.length ? '\n\nFișe nelegate (' + log.nelegate.length + '), vezi foaia NELEGATE din mamă:\n' + log.nelegate.join('\n') : '') +
+        (log.nelegate.length ? '\n\nFișe nelegate (' + log.nelegate.length + '), vezi foaia NELEGATE din centralizator:\n' + log.nelegate.join('\n') : '') +
         (log.erori.length ? '\n\nErori:\n' + log.erori.join('\n') : ''));
       PropertiesService.getScriptProperties().deleteProperty('rf_me');
     }
@@ -565,7 +565,7 @@ function aplicaLegaturi_() {
   return n;
 }
 
-/* ===================== 3. ACTUALIZEAZĂ FD (mamă → fișe) ===================== */
+/* ===================== 3. ACTUALIZEAZĂ FD (centralizator → fișe) ===================== */
 
 /** Grupa din fișă a unui cod: CN/AP/RA (cunoștințe / aptitudini / responsabilitate). Coduri vechi CN01, AP12, RA05;
  *  coduri noi (ARACIS) C1–C8, A1–A8, R1–R8. Altceva = ''. */
@@ -599,7 +599,7 @@ function migreazaCompetente_(slots, manual, mapare) {
   return { slots: noi.map(a => a.slice(0, 5).concat(['', '', '', '', '']).slice(0, 5)), manual: man, log: log };
 }
 
-/** Foaia COMPETENTE_VECHI din mamă (COD VECHI | COD NOU | CUM | TEXT VECHI) → mapare pentru migreazaCompetente_; null dacă lipsește. */
+/** Foaia COMPETENTE_VECHI din centralizator (COD VECHI | COD NOU | CUM | TEXT VECHI) → mapare pentru migreazaCompetente_; null dacă lipsește. */
 function competenteVechi_() {
   const sh = SpreadsheetApp.getActive().getSheetByName('COMPETENTE_VECHI');
   if (!sh || sh.getLastRow() < 2) return null;
@@ -644,7 +644,7 @@ function actualizeazaFisele() {
     const q = ui.alert('⚠ Actualizează FD – rulare neterminată',
       'O actualizare începută la ' + t + ' nu a fost dusă până la capăt: ' + nDone + ' din ' + rows.length + ' fișe sunt deja făcute.\n\n' +
       'DA = continuă cu fișele rămase (cele făcute se sar)\n' +
-      'NU = reia de la zero (rescrie TOATE fișele, cu datele actuale din mamă)\n' +
+      'NU = reia de la zero (rescrie TOATE fișele, cu datele actuale din centralizator)\n' +
       'Anulare = nu face nimic', ui.ButtonSet.YES_NO_CANCEL);
     if (q === ui.Button.YES) { /* continuă */ }
     else if (q === ui.Button.NO) { props.deleteProperty('done'); props.deleteProperty('done_t'); props.deleteProperty('au_mig'); }
@@ -652,12 +652,12 @@ function actualizeazaFisele() {
   }
   if (nDone === 0 || !props.getProperty('done')) {
     if (!confirma_('Actualizează FD', [
-      'Se rescriu în ' + rows.length + ' fișe (cele cu URL în DISCIPLINE): link-ul mamei, cod/cheie, blocul INFO (universitate, facultate, decan, ore/credit etc.), departament și director, tabelul de forme, rândul disciplinei din plan (ore, credite, formă, tip, titulari) – tabelul tehnic al planului se reduce la UN SINGUR RÂND, al acestei discipline (celelalte rânduri din plan, copiate în fișele vechi, se șterg) – și catalogul de competențe.',
+      'Se rescriu în ' + rows.length + ' fișe (cele cu URL în DISCIPLINE): link-ul centralizatorului, cod/cheie, blocul INFO (universitate, facultate, decan, ore/credit etc.), departament și director, tabelul de forme, rândul disciplinei din plan (ore, credite, formă, tip, titulari) – tabelul tehnic al planului se reduce la UN SINGUR RÂND, al acestei discipline (celelalte rânduri din plan, copiate în fișele vechi, se șterg) – și catalogul de competențe.',
       'Orice modificare făcută manual în aceste celule tehnice se pierde. Textele completate de profesori (obiective, conținut, bibliografie etc.) nu se ating.',
       'În foaia FISA: comentarii pe câmpurile completate automat și semnul ⓘ în coloana M, cu link la instrucțiuni (INFO → SITE_INSTRUCTIUNI). Nu apar în PDF.',
-      'Dacă mama are foaia COMPETENTE_VECHI: codurile de competențe alese de profesori în PANOU (CN.., AP.., RA..) se schimbă în codurile noi ARACIS (C1–C8, A1–A8, R1–R8); textele proprii ale disciplinei se mută la „Specificări manuale”, nu se pierd.',
+      'Dacă centralizatorul are foaia COMPETENTE_VECHI: codurile de competențe alese de profesori în PANOU (CN.., AP.., RA..) se schimbă în codurile noi ARACIS (C1–C8, A1–A8, R1–R8); textele proprii ale disciplinei se mută la „Specificări manuale”, nu se pierd.',
       'Dacă durează mai mult de ~5 minute, continuă singur în fundal și primești email la final.'],
-      ['Textele completate de profesori.', 'Foile mamei.'])) return;
+      ['Textele completate de profesori.', 'Foile centralizatorului.'])) return;
   }
   props.setProperty('au_me', Session.getEffectiveUser().getEmail());
   actualizeazaRuleaza_(true);
@@ -725,7 +725,7 @@ function ajutorFisa_(site) {
   const baza = String(site).replace(/#.*$/, ''), url = a => baza + '#' + a;
   const note = {};
   AJUTOR_NOTE.forEach(([cel, anc, ce, sursa]) => cel.forEach(c => {
-    note[c] = 'Completat automat din ' + sursa + '.\n' + ce + '.\nNu se modifică aici; o greșeală se corectează în fișierul-mamă (apare la următorul „Actualizează FD”).\nDetalii: ' + url(anc);
+    note[c] = 'Completat automat din ' + sursa + '.\n' + ce + '.\nNu se modifică aici; o greșeală se corectează în fișierul „Centralizator discipline și titulari ARH” (apare la următorul „Actualizează FD”).\nDetalii: ' + url(anc);
   }));
   const linkuri = [];
   for (let r = 1; r <= AJ_RAND_MAX; r++) linkuri.push([AJUTOR_LINKURI[r] ? '=HYPERLINK("' + url(AJUTOR_LINKURI[r]) + '","ⓘ")' : '']);
@@ -744,12 +744,12 @@ function puneAjutor_(sh, site) {
   sh.setColumnWidth(13, 28);
 }
 
-/** Scrie în fișă datele din mamă. ff = {sh: foaia FISA, dt: foaia _DATE (la fișele vechi, aceeași cu FISA)}.
- *  Celulele tehnice (mama, cod, cheie, INFO, departamente, forme, rândul din plan, competențe) merg în dt; departamentul (B10) rămâne în FISA. */
-function scrieInFisa_(ff, r, mamaUrl, info, comp, mapare) {
+/** Scrie în fișă datele din centralizator. ff = {sh: foaia FISA, dt: foaia _DATE (la fișele vechi, aceeași cu FISA)}.
+ *  Celulele tehnice (centralizator, cod, cheie, INFO, departamente, forme, rândul din plan, competențe) merg în dt; departamentul (B10) rămâne în FISA. */
+function scrieInFisa_(ff, r, centralizatorUrl, info, comp, mapare) {
   const sh = ff.sh, dt = ff.dt, cheie = r.cod + ' | ' + r.den;
-  if (dt === sh) sh.getRange('N1').setValue('ZONA TEHNICĂ – nu se tipărește și nu se modifică manual. Se completează automat din fișierul-mamă (butonul „Actualizează FD”).');
-  dt.getRange('O3').setValue(mamaUrl);
+  if (dt === sh) sh.getRange('N1').setValue('ZONA TEHNICĂ – nu se tipărește și nu se modifică manual. Se completează automat din „Centralizator discipline și titulari ARH” (butonul „Actualizează FD”).');
+  dt.getRange('O3').setValue(centralizatorUrl);
   dt.getRange('O4').setValue(r.cod);
   dt.getRange('O10').setValue(cheie);
   // INFO: potrivire pe etichetele din N12:N28
@@ -836,7 +836,7 @@ function trimiteFise_(test) {
         'Se trimit ' + dest.length + ' emailuri (câte unul pe profesor, cu linkurile fișelor lui) de pe contul ' + me + '.',
         'Emailurile NU pot fi retrase după trimitere.',
         'Verifică înainte: AN_UNIVERSITAR din INFO, titularii din DISCIPLINE, drepturile acordate, rezultatul TEST-ului.'],
-        ['Fișele și foile mamei.']);
+        ['Fișele și foile centralizatorului.']);
   if (!ok) return;
   const info = info_(), an = info.param['AN_UNIVERSITAR'] || '';
   let n = 0;
@@ -884,16 +884,16 @@ function backupPorneste_(opt) {
     if (ui.alert('⚠ Backup blocat', 'Backup-ul „' + st0.folderName + '” nu a mai progresat de peste 20 de minute (' + st0.copiate + ' din ' + st0.total + ').\n\nOK = îl abandonez și pornesc unul nou. Anulare = nu fac nimic.', ui.ButtonSet.OK_CANCEL) !== ui.Button.OK) return;
     bkClear_();
   }
-  const tz = Session.getScriptTimeZone(), mamaId = SpreadsheetApp.getActive().getId(), folder = folderFise_();
-  const ids = [mamaId];
+  const tz = Session.getScriptTimeZone(), centralizatorId = SpreadsheetApp.getActive().getId(), folder = folderFise_();
+  const ids = [centralizatorId];
   for (const f of sheetsInFolder_(folder)) if (ids.indexOf(f.getId()) < 0) ids.push(f.getId());
   let nume = opt.nume || ('BACKUP ' + Utilities.formatDate(new Date(), tz, 'yyyy-MM-dd HH.mm'));
   if (folder.getFoldersByName(nume).hasNext()) nume += ' (' + Utilities.formatDate(new Date(), tz, 'HH.mm.ss') + ')';
   if (!opt.confirmat && !confirma_('BACKUP FD', [
     'În folderul fișelor („' + folder.getName() + '”) se creează folderul „' + nume + '”.',
-    'Se copiază acolo ' + (ids.length - 1) + ' fișe + fișierul-mamă (copii cu același nume; drepturile de acces NU se copiază).',
+    'Se copiază acolo ' + (ids.length - 1) + ' fișe + centralizatorul (copii cu același nume; drepturile de acces NU se copiază).',
     'Se apasă O SINGURĂ DATĂ: dacă durează mai mult de ~5 minute, continuă singur în fundal. La final primești un email cu raportul și verificarea numărului de copii.'],
-    ['Fișele originale și mama.', 'Backup-urile anterioare.'])) return;
+    ['Fișele originale și centralizatorul.', 'Backup-urile anterioare.'])) return;
   const dest = folder.createFolder(nume);
   const st = { folderId: dest.getId(), folderName: nume, total: ids.length, copiate: 0, chunks: bkSaveIds_(ids), erori: {}, dupa: opt.dupa || '',
                me: Session.getEffectiveUser().getEmail(), t0: Date.now(), lastT: Date.now() };
@@ -932,7 +932,7 @@ function backupRuleaza_() {
     // verificare: câte copii există față de câte surse
     const lipsa = ids.filter(id => !gata[id]), copii = Object.keys(gata).length;
     const complet = lipsa.length === 0;
-    let msg = (complet ? 'BACKUP COMPLET' : 'BACKUP INCOMPLET') + ' – folderul „' + st.folderName + '”: ' + copii + ' din ' + ids.length + ' fișiere copiate (fișe + mama).';
+    let msg = (complet ? 'BACKUP COMPLET' : 'BACKUP INCOMPLET') + ' – folderul „' + st.folderName + '”: ' + copii + ' din ' + ids.length + ' fișiere copiate (fișe + centralizatorul).';
     if (!complet) msg += '\nNeadăugate:\n' + lipsa.map(id => { try { return DriveApp.getFileById(id).getName(); } catch (e) { return id; } }).join('\n') + '\nErori:\n' + Object.keys(st.erori).map(k => k + ': ' + st.erori[k]).join('\n');
     if (st.dupa === 'ANNOU') {
       if (complet) {
@@ -990,8 +990,8 @@ function pdfFd() {
     if (ui.alert('⚠ Generare PDF blocată', '„' + st0.folderName + '” nu a mai progresat de peste 20 de minute (' + st0.facute + ' din ' + st0.total + ').\n\nOK = o abandonez și pornesc una nouă. Anulare = nu fac nimic.', ui.ButtonSet.OK_CANCEL) !== ui.Button.OK) return;
     pdfClear_();
   }
-  const folder = folderFise_(), mamaId = SpreadsheetApp.getActive().getId(), ids = [];
-  for (const f of sheetsInFolder_(folder)) if (f.getId() !== mamaId && ids.indexOf(f.getId()) < 0) ids.push(f.getId());
+  const folder = folderFise_(), centralizatorId = SpreadsheetApp.getActive().getId(), ids = [];
+  for (const f of sheetsInFolder_(folder)) if (f.getId() !== centralizatorId && ids.indexOf(f.getId()) < 0) ids.push(f.getId());
   if (!ids.length) { ui.alert('Nu am găsit fișe în folderul fișelor.'); return; }
   const nume = 'PDF ' + Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd HH.mm');
   if (!confirma_('PDF FD – toate fișele', [
@@ -1076,12 +1076,12 @@ function fontGeorgia() {
     'În TOATE fișierele Google Sheets din folderul fișelor (și subfoldere), în TOATE foile, tot intervalul primește fontul Georgia.',
     'Se pierde orice alt font setat manual (mărimea, culorile și bordurile rămân).',
     'Operația este reluabilă dacă se atinge limita de timp.'],
-    ['Conținutul și formulele celulelor.', 'Foile mamei.'])) return;
-  const t0 = Date.now(), props = PropertiesService.getScriptProperties(), mamaId = SpreadsheetApp.getActive().getId();
+    ['Conținutul și formulele celulelor.', 'Foile centralizatorului.'])) return;
+  const t0 = Date.now(), props = PropertiesService.getScriptProperties(), centralizatorId = SpreadsheetApp.getActive().getId();
   const done = JSON.parse(props.getProperty('done_font') || '{}'); let n = 0, oprit = false; const erori = [];
   for (const f of sheetsInFolder_(folderFise_())) {
     const id = f.getId();
-    if (id === mamaId || done[id]) continue;
+    if (id === centralizatorId || done[id]) continue;
     if (Date.now() - t0 > T_LIMIT_MS) { oprit = true; break; }
     try {
       SpreadsheetApp.openById(id).getSheets().forEach(sh => sh.getRange(1, 1, sh.getMaxRows(), sh.getMaxColumns()).setFontFamily('Georgia'));

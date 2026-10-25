@@ -57,9 +57,9 @@ tabel(rz, ['Situație', 'Fișe', 'Ce e de făcut'], [
     ['Discipline din plan fără fișă', len(d['faraFisa']), 'Fișe de creat sau de legat: fila „Plan fără fișă”.'],
     ['Fișe corecte', len(grup['ok']), 'Nimic.'],
 ], [44, 7, 80], note=[
-    f'Comparație între cele {len(out)} de fișe și planul oficial din mamă (INFO → PLAN_FOAIE_CURENTA = „PLAN ACTUAL”, 2026/2027, {d["nPlan"]} discipline).',
-    'Cauza diferențelor: datele tehnice din fișe au fost copiate din foaia PLAN veche a mamei, care are erori.',
-    'Pași în mamă: 1. Preia disciplinele din PLAN → 2. Generează URL/stare fișe → 3. Actualizează FD. Apoi se descarcă fișele și se reface comparația.',
+    f'Comparație între cele {len(out)} de fișe și planul oficial din centralizator (INFO → PLAN_FOAIE_CURENTA = „PLAN ACTUAL”, 2026/2027, {d["nPlan"]} discipline).',
+    'Cauza diferențelor: datele tehnice din fișe au fost copiate din foaia PLAN veche a centralizatorului, care are erori.',
+    'Pași în centralizator: 1. Preia disciplinele din PLAN → 2. Generează URL/stare fișe → 3. Actualizează FD. Apoi se descarcă fișele și se reface comparația.',
 ])
 
 ws = wb.create_sheet('Ore și credite')

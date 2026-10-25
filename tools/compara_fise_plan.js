@@ -2,7 +2,7 @@
 // Intrare: work/fise_extras.json (din extrage.py). Ieșire: work/comparatie.json
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const ROOT = path.join(__dirname, '..');
-vm.runInThisContext(fs.readFileSync(path.join(ROOT, 'Mama.gs'), 'utf8'));
+vm.runInThisContext(fs.readFileSync(path.join(ROOT, 'Centralizator.gs'), 'utf8'));
 const d = JSON.parse(fs.readFileSync(path.join(ROOT, 'work', 'fise_extras.json'), 'utf8'));
 const plan = parsePlan_(d.plan, ['Limba engleză', 'Limba franceză']);   // ca limbiStraine_() cu INFO implicit
 const rows = plan.map((p, i) => Object.assign({}, p, { row: i, url: '' }));
