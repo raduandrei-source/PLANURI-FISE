@@ -37,3 +37,7 @@ Istoricul complet și deciziile: `INSTRUCTIUNI_CONTINUARE.md`. Răspunsurile că
 ## Referințele rezultatelor învățării în fișe
 După fiecare RÎ: „(ARACIS-n, D46-x)” la font 8. ARACIS-n = rândul n din Anexa 2, Arhitectură CPS 8 (1–8);
 D46-x = Directiva 2005/36/CE art. 46 alin. (2), literele a–k. Tabelele: `../../livrabile/`.
+
+
+## Memoria comună a proiectelor (depozitul `all`)
+Acest proiect are o notă în depozitul https://github.com/raduandrei-source/all, la `planuri-fise/planuri-fise.md` (vezi `INDEX.md` de acolo). La începutul sesiunii citește nota (dacă depozitul `all` e disponibil în sesiune; dacă nu, spune-i utilizatorului că poate atașa `all`). La sfârșitul unei sesiuni cu schimbări reale (funcționalitate nouă, decizii, stare, roadmap, versiune nouă, script Google Sheets modificat), actualizează nota proiectului în `all` și rulează `python tools/sync.py` acolo, conform `all/CLAUDE.md` secțiunea 3; dacă nu poți scrie în `all`, dă utilizatorului un bloc de actualizare gata de lipit. Răspunde în română, concis.
