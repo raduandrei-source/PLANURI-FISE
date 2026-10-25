@@ -13,8 +13,11 @@ os.makedirs(DOCS, exist_ok=True)
 e = html.escape
 
 CSS = """
-:root{--bg:#fbfaf7;--fg:#1f1f1f;--muted:#5f5f5f;--line:#e2ded6;--accent:#8a3b12;--card:#ffffff;--mark:#fff4d6;--code:#f3efe7}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171614;--fg:#ece9e3;--muted:#a9a49b;--line:#34312c;--accent:#e39a6c;--card:#1f1d1a;--mark:#3a3120;--code:#2a2723}}
+:root{--bg:#ececea;--fg:#1f1f1f;--muted:#555452;--line:#d2d0cb;--accent:#8a3b12;--card:#f7f7f5;--mark:#fbf0cf;--code:#e2e1dd;--tu-bg:#dfeed8;--tu-fg:#2f5d23}
+:root[data-theme="dark"]{--bg:#171614;--fg:#ece9e3;--muted:#a9a49b;--line:#34312c;--accent:#e39a6c;--card:#1f1d1a;--mark:#3a3120;--code:#2a2723;--tu-bg:#24341f;--tu-fg:#a9d29a}
+.tema{flex:none;font:14px Georgia,serif;color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:18px;padding:6px 14px;cursor:pointer}
+.tema:hover{border-color:var(--accent);color:var(--accent)}
+.cap{max-width:1180px;margin:0 auto;display:flex;gap:16px;align-items:flex-start;justify-content:space-between}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.6 Georgia,'Times New Roman',serif}
 a{color:var(--accent)}
@@ -33,8 +36,7 @@ h2{font-size:22px;margin:34px 0 4px;padding-bottom:4px;border-bottom:2px solid v
 h3{font-size:18px;margin:0 0 6px}
 .unde{font-size:13px;color:var(--muted);margin:-2px 0 8px}
 .auto{display:inline-block;font-size:12px;padding:1px 8px;border-radius:10px;background:var(--code);color:var(--muted);margin-left:6px;vertical-align:2px}
-.tu{background:#e9f3e4;color:#2f5d23}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tu{background:#24341f;color:#a9d29a}}
+.tu{background:var(--tu-bg);color:var(--tu-fg)}
 code,.ex{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.92em}
 .ex{display:block;padding:10px 12px;margin:8px 0;border-left:3px solid var(--accent);border-radius:0 6px 6px 0}
 .ex small{color:var(--muted);font-size:11px}
@@ -48,15 +50,22 @@ ol li,ul li{margin:4px 0}
 .cand{font-size:13px;color:var(--muted)}
 .atentie{border-left:3px solid #c0392b;padding:6px 12px;margin:10px 0;background:var(--card)}
 @media (max-width:860px){.wrap{display:block}nav{position:static;max-height:none;border-bottom:1px solid var(--line);columns:2;column-gap:20px}nav .g{break-after:avoid}section{margin:0 0 6px;padding:14px 4px}}
-@media print{nav,header p{display:none}.wrap{display:block}section:target{background:none}}
+@media print{nav,header p,.tema{display:none}.wrap{display:block}section:target{background:none}}
 """
+
+# tema: implicit luminoasă (gri deschis); butonul o comută și alegerea se ține minte în browser
+JS_TEMA_CAP = "try{var t=localStorage.getItem('tema');if(t==='dark')document.documentElement.dataset.theme='dark';}catch(e){}"
+JS_TEMA = """(function(){var b=document.getElementById('tema'),r=document.documentElement;
+function arata(){var d=r.dataset.theme==='dark';b.textContent=d?'☀ Luminos':'☾ Întunecat';b.title=d?'Treci la tema luminoasă':'Treci la tema întunecată';}
+b.addEventListener('click',function(){if(r.dataset.theme==='dark')delete r.dataset.theme;else r.dataset.theme='dark';
+try{localStorage.setItem('tema',r.dataset.theme==='dark'?'dark':'light');}catch(e){}arata();});arata();})();"""
 
 def pagina(titlu, subtitlu, nav, corp, alta):
     return f"""<!doctype html>
 <html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{e(titlu)}</title><style>{CSS}</style></head>
-<body><header><div style="max-width:1180px;margin:0 auto"><h1>{e(titlu)}</h1><p>{subtitlu} · {alta}</p></div></header>
-<div class="wrap"><nav>{nav}</nav><main>{corp}</main></div></body></html>"""
+<title>{e(titlu)}</title><script>{JS_TEMA_CAP}</script><style>{CSS}</style></head>
+<body><header><div class="cap"><div><h1>{e(titlu)}</h1><p>{subtitlu} · {alta}</p></div><button class="tema" id="tema" type="button">☾ Întunecat</button></div></header>
+<div class="wrap"><nav>{nav}</nav><main>{corp}</main></div><script>{JS_TEMA}</script></body></html>"""
 
 def sec(id_, titlu, corp, unde='', auto=None):
     eticheta = '' if auto is None else (' <span class="auto">automat, din centralizator</span>' if auto else ' <span class="auto tu">completezi tu</span>')
